@@ -33,14 +33,20 @@ oauth2 = new googleapis.OAuth2Client(
  * so the private key must be extracted and converted to a passphrase-less
  * RSA key: openssl pkcs12 -in key.p12 -nodes -nocerts > key.pem
  */
+
 jwt = new googleapis.auth.JWT(
   //email, keyFile, key, scopes, subject
   process.env.CLIENTID,
   process.env.PRIVATE_KEY_PATH,
-  'key',
+  fs.readFileSync(process.env.PRIVATE_KEY_PATH, "utf8"),
   // make sure this is an array
   [process.env.SCOPE],
-  process.env.USERNAME
+  process.env.USERNAME,
+  prcess.env.AUDIENCE,
+  'localhost',
+  'dev/oauth2/token',
+  '8443',
+  'assertion'
 );
 
 // Get discovery document
