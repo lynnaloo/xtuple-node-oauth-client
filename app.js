@@ -1,21 +1,30 @@
 
 var fs = require("fs"),
   env = require('node-env-file'),
-  googleapis = require("googleapis"),
-  client, service, list, auth;
+  googleapis = require("googleapis-plus"),
+  client,
+  service,
+  list,
+  auth,
+  host,
+  baseUrl;
 
 env(__dirname + '/.env');
-var database = process.env.DATABASE,
-  discoveryPath = process.env.DISCOVERY_HOST + database + "/discovery/v1alpha1/apis/v1alpha1/rest",
+
+host = "https://" + process.env.HOST;
+if (process.env.PORT) {
+  host = host + ":" + process.env.PORT;
+}
+baseUrl = host + "/" + process.env.DATABASE;
 
 // params clientId, clientSecret, redirectUri, {authBaseUrl, tokenUrl}
 oauth2 = new googleapis.OAuth2Client(
   process.env.CLIENTID,
   process.env.SECRET,
-  process.env.REDIRECT_URI,
+  baseUrl + "/oauth",
   {
-    tokenUrl: process.env.TOKEN_CREDENTIAL_URI,
-    authBaseUrl: process.env.DISCOVERY_HOST
+    tokenUrl: baseUrl + "/oauth/token",
+    authBaseUrl: baseUrl
   }
 );
 
@@ -35,25 +44,28 @@ oauth2 = new googleapis.OAuth2Client(
  */
 
 jwt = new googleapis.auth.JWT(
-  //email, keyFile, key, scopes, subject
+  //email, keyFile, key, scopes, person, audience, host, path, port, grant
   process.env.CLIENTID,
   process.env.PRIVATE_KEY_PATH,
   fs.readFileSync(process.env.PRIVATE_KEY_PATH, "utf8"),
   // make sure this is an array
-  [process.env.SCOPE],
+  [baseUrl + "/auth"],
   process.env.USERNAME,
-  prcess.env.AUDIENCE,
-  'localhost',
-  'dev/oauth2/token',
-  '8443',
+  baseUrl + "/oauth/token",
+  process.env.HOST,
+  "/" + process.env.DATABASE + "/oauth2/token",
+  process.env.PORT,
   'assertion'
 );
 
 // Get discovery document
 service = googleapis.discover('xtuple', 'v1alpha1', {
-  baseDiscoveryUrl: discoveryPath,
-  discoveryParams: { assertion_type: 'assertion' }
+  baseDiscoveryUrl: baseUrl + "/discovery/v1alpha1/apis/v1alpha1/rest",
+  discoveryParams: {}
 });
+
+console.log(baseUrl + "/discovery/v1alpha1/apis/v1alpha1/rest");
+
 
 service.execute(function(err, data) {
   if (err) {
