@@ -4,7 +4,7 @@ Node Oauth2 client for xTuple Rest API
 
 intro
 ----
-Node client to work with (xTuple)[http://github.com/xtuple/xtuple] REST services.
+Node client to work with [xTuple REST services.](http://github.com/xtuple/xtuple)
 
 After setting up Oauth in xTuple, setup  your local environment file
 
