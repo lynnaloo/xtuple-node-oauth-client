@@ -1,4 +1,4 @@
-Node Oauth2 client for xTuple Rest API
+xTuple OAuth2 Client for Node
 ====
 
 Node client to work with [xTuple REST services.](http://github.com/xtuple/xtuple)
