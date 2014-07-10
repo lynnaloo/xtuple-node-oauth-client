@@ -11,8 +11,6 @@ var fs = require("fs"),
 
 env(__dirname + '/.env');
 
-//**Ignore self signed ssl
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = process.env.TLS;
 
 host = "https://" + process.env.HOST;
 if (process.env.PORT) {
