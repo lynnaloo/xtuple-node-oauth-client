@@ -67,9 +67,6 @@ service = googleapis.discover('xtuple', 'v1alpha1', {
   discoveryParams: {}
 });
 
-console.log(baseUrl + "/discovery/v1alpha1/apis/v1alpha1/rest");
-
-
 service.execute(function(err, data) {
   if (err) {
     console.log('Problem during the client discovery:', err);
