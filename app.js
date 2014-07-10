@@ -11,6 +11,7 @@ var fs = require("fs"),
 
 env(__dirname + '/.env');
 
+
 host = "https://" + process.env.HOST;
 if (process.env.PORT) {
   host = host + ":" + process.env.PORT;
