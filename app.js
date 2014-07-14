@@ -49,11 +49,11 @@ jwt = new googleapis.auth.JWT(
   process.env.PRIVATE_KEY_PATH,
   fs.readFileSync(process.env.PRIVATE_KEY_PATH, "utf8"),
   // make sure this is an array
-  [baseUrl + "/auth"],
+  [baseUrl + "/auth/" + process.env.DATABASE],
   process.env.USERNAME,
   baseUrl + "/oauth/token",
   process.env.HOST,
-  "/" + process.env.DATABASE + "/oauth2/token",
+  "/" + process.env.DATABASE + "/oauth/token",
   process.env.PORT,
   'assertion'
 );
