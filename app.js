@@ -7,16 +7,17 @@ var fs = require("fs"),
   list,
   auth,
   host,
-  baseUrl;
+  baseUrl,
+  database;
 
 env(__dirname + '/.env');
 
-
+database = process.env.DATABASE;
 host = "https://" + process.env.HOST;
 if (process.env.PORT) {
   host = host + ":" + process.env.PORT;
 }
-baseUrl = host + "/" + process.env.DATABASE;
+baseUrl = host + "/" + database;
 
 // params clientId, clientSecret, redirectUri, {authBaseUrl, tokenUrl}
 oauth2 = new googleapis.OAuth2Client(
@@ -50,11 +51,11 @@ jwt = new googleapis.auth.JWT(
   process.env.PRIVATE_KEY_PATH,
   fs.readFileSync(process.env.PRIVATE_KEY_PATH, "utf8"),
   // make sure this is an array
-  [baseUrl + "/auth/" + process.env.DATABASE],
+  [baseUrl + "/auth/" + database],
   process.env.USERNAME,
   baseUrl + "/oauth/token",
   process.env.HOST,
-  "/" + process.env.DATABASE + "/oauth/token",
+  "/" + database + "/oauth/token",
   process.env.PORT,
   'assertion'
 );
@@ -77,6 +78,7 @@ service.execute(function(err, data) {
       return;
     }
 
+    console.log("Access tokens:");
     console.log(result);
 
     oauth2.setCredentials({
