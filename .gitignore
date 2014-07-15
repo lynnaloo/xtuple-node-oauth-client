@@ -2,3 +2,5 @@ node_modules
 keys
 *DS_Store
 .env
+*.pem
+*.p12
