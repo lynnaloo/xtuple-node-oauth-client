@@ -1,8 +1,8 @@
-
-var fs = require("fs"),
+var fs = require('fs'),
   dotenv = require('dotenv'),
   googleapis = require('googleapis-plus'),
   _ = require('underscore'),
+  jwt,
   host,
   baseUrl,
   database;
@@ -11,11 +11,11 @@ var fs = require("fs"),
 dotenv.load();
 
 database = process.env.DATABASE;
-host = "https://" + process.env.HOST;
+host = 'https://' + process.env.HOST;
 if (process.env.PORT) {
-  host = host + ":" + process.env.PORT;
+  host = host + ':' + process.env.PORT;
 }
-baseUrl = host + "/" + database;
+baseUrl = host + '/' + database;
 
 /**
  * The JWT authorization is ideal for performing server-to-server
@@ -36,13 +36,13 @@ jwt = new googleapis.auth.JWT(
   //email, keyFile, key, scopes, person, audience, host, path, port, grant
   process.env.CLIENTID,
   process.env.PRIVATE_KEY_PATH,
-  fs.readFileSync(process.env.PRIVATE_KEY_PATH, "utf8"),
+  fs.readFileSync(process.env.PRIVATE_KEY_PATH, 'utf8'),
   // make sure this is an array
-  [baseUrl + "/auth/" + database],
+  [baseUrl + '/auth/' + database],
   process.env.USERNAME,
-  baseUrl + "/oauth/token",
+  baseUrl + '/oauth/token',
   process.env.HOST,
-  "/" + database + "/oauth/token",
+  '/' + database + '/oauth/token',
   process.env.PORT,
   'assertion'
 );
@@ -69,12 +69,12 @@ googleapis.discover('', 'v1alpha1',
     .withAuthClient(jwt)
     .execute(function(err, result) {
       if (result) {
-        console.log("Your list of contacts: ");
+        console.log('Your list of contacts: ');
         _.map(result.data.data, function(obj){
-          console.log(obj.firstName + " " + obj.lastName);
+          console.log(obj.firstName, obj.lastName);
         });
       } else {
-        console.log("No Contacts!");
+        console.log('No Contacts!');
       }
     });
 
