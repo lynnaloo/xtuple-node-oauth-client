@@ -69,6 +69,7 @@ googleapis.discover('', 'v1alpha1',
     .withAuthClient(jwt)
     .execute(function(err, result) {
       if (result) {
+        console.log('Your list of contacts: ');
         _.map(result.data.data, function(obj){
           console.log(obj.firstName, obj.lastName);
         });
