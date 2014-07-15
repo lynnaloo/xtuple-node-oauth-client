@@ -1,8 +1,8 @@
-
 var fs = require("fs"),
   dotenv = require('dotenv'),
   googleapis = require('googleapis-plus'),
   _ = require('underscore'),
+  jwt,
   host,
   baseUrl,
   database;
@@ -65,13 +65,13 @@ googleapis.discover('', 'v1alpha1',
 
     // *** Example REST Query ***
     // Now that we have the discovery doc, show a list of Contacts
-    client[database].Contact.list()
+    client[database].ItemSite.list()
     .withAuthClient(jwt)
     .execute(function(err, result) {
       if (result) {
-        console.log("Your list of contacts: ");
         _.map(result.data.data, function(obj){
-          console.log(obj.firstName + " " + obj.lastName);
+          console.dir(obj);
+          //console.log(obj.firstName + " " + obj.lastName);
         });
       } else {
         console.log("No Contacts!");
