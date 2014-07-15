@@ -1,16 +1,14 @@
 
 var fs = require("fs"),
-  env = require('node-env-file'),
-  googleapis = require("googleapis-plus"),
-  client,
-  service,
-  list,
-  auth,
+  dotenv = require('dotenv'),
+  googleapis = require('googleapis-plus'),
+  _ = require('underscore'),
   host,
   baseUrl,
   database;
 
-env(__dirname + '/.env');
+// load environment variables
+dotenv.load();
 
 database = process.env.DATABASE;
 host = "https://" + process.env.HOST;
@@ -18,17 +16,6 @@ if (process.env.PORT) {
   host = host + ":" + process.env.PORT;
 }
 baseUrl = host + "/" + database;
-
-// params clientId, clientSecret, redirectUri, {authBaseUrl, tokenUrl}
-oauth2 = new googleapis.OAuth2Client(
-  process.env.CLIENTID,
-  process.env.SECRET,
-  baseUrl + "/oauth",
-  {
-    tokenUrl: baseUrl + "/oauth/token",
-    authBaseUrl: baseUrl
-  }
-);
 
 /**
  * The JWT authorization is ideal for performing server-to-server
@@ -60,13 +47,11 @@ jwt = new googleapis.auth.JWT(
   'assertion'
 );
 
-// Get discovery document
-service = googleapis.discover('xtuple', 'v1alpha1', {
-  baseDiscoveryUrl: baseUrl + "/discovery/v1alpha1/apis/v1alpha1/rest",
-  discoveryParams: {}
-});
+// Don't specify a name because our discovery url doesn't include it
+googleapis.discover('', 'v1alpha1',
+  {baseDiscoveryUrl: baseUrl + '/discovery/v1alpha1/apis'}
+).execute(function(err, client) {
 
-service.execute(function(err, data) {
   if (err) {
     console.log('Problem during the client discovery:', err);
     return;
@@ -78,16 +63,20 @@ service.execute(function(err, data) {
       return;
     }
 
-    console.log("Access tokens:");
-    console.log(result);
-
-    oauth2.setCredentials({
-      access_token: result.access_token,
-      refresh_token: result.refresh_token
+    // *** Example REST Query ***
+    // Now that we have the discovery doc, show a list of Contacts
+    client[database].Contact.list()
+    .withAuthClient(jwt)
+    .execute(function(err, result) {
+      if (result) {
+        console.log("Your list of contacts: ");
+        _.map(result.data.data, function(obj){
+          console.log(obj.firstName + " " + obj.lastName);
+        });
+      } else {
+        console.log("No Contacts!");
+      }
     });
 
-    list = data[database].contacts.list();
-    list.withAuthClient(oauth2);
-    list.execute(function(err, result) {});
   });
 });
