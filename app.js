@@ -23,13 +23,6 @@ baseUrl = host + '/' + database;
  *
  * Suggested reading for Admin SDK users using service accounts:
  * https://developers.google.com/admin-sdk/directory/v1/guides/delegation
- *
- * Note on the private_key.pem:
- * Node.js currently does not support direct access to the keys stored within
- * PKCS12 file (see issue comment
- * https://github.com/joyent/node/issues/4050#issuecomment-8816304)
- * so the private key must be extracted and converted to a passphrase-less
- * RSA key: openssl pkcs12 -in key.p12 -nodes -nocerts > key.pem
  */
 
 jwt = new googleapis.auth.JWT(
