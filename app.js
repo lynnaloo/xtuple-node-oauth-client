@@ -65,13 +65,12 @@ googleapis.discover('', 'v1alpha1',
 
     // *** Example REST Query ***
     // Now that we have the discovery doc, show a list of Contacts
-    client[database].ItemSite.list()
+    client[database].Contact.list()
     .withAuthClient(jwt)
     .execute(function(err, result) {
       if (result) {
         _.map(result.data.data, function(obj){
-          console.dir(obj);
-          //console.log(obj.firstName + " " + obj.lastName);
+          console.log(obj.firstName, obj.lastName);
         });
       } else {
         console.log("No Contacts!");
