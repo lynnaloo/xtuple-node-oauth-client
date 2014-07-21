@@ -1,5 +1,4 @@
-xTuple OAuth2 Client for Node
-====
+## xTuple OAuth2 Client for Node
 
 Node.js client to work with [xTuple REST services.](http://github.com/xtuple/xtuple)
 
