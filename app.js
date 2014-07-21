@@ -36,8 +36,7 @@ jwt = new googleapis.auth.JWT(
   baseUrl + '/oauth/token',
   process.env.HOST,
   '/' + database + '/oauth/token',
-  process.env.PORT,
-  'assertion'
+  process.env.PORT
 );
 
 // Don't specify a name because our discovery url doesn't include it
@@ -56,20 +55,57 @@ googleapis.discover('', 'v1alpha1',
       return;
     }
 
-    // *** Example REST Query ***
-    // Now that we have the discovery doc, show a list of Contacts
-    client[database].Contact.list()
+    // *** Example REST Queries ***
+
+    // Show all To Do Items in a nice format
+    client[database].ToDo.list({
+      maxResults: 50,
+      q: 'N'
+    })
     .withAuthClient(jwt)
     .execute(function(err, result) {
       if (result) {
-        console.log('Your list of contacts: ');
+        console.log('Todos: ');
         _.map(result.data.data, function(obj){
-          console.log(obj.firstName, obj.lastName);
+          console.log(obj.uuid);
+          console.log(obj.name);
+          console.log(obj.description);
+          console.log(obj.status);
         });
       } else {
-        console.log('No Contacts!');
+        console.log('No Todos!');
       }
     });
+
+    // Get a single To Do:
+    // client[database].ToDo.get({uuid: 'e44d79ab-d9d8-40f2-af7d-0dc443b34269'})
+    // .withAuthClient(jwt)
+    // .execute(function(err, result) {
+    //   if (result) {
+    //     console.log('Todo: ');
+    //     console.log(result);
+    //   } else {
+    //     console.log('No Todos!');
+    //   }
+    // });
+
+    // Insert To Do
+    // client[database].ToDo.insert({
+    //   name: 'New To Do',
+    //   dueDate: '08/09/2080',
+    //   status: 'N',
+    //   isActive: true,
+    //   description: 'New To Do Entered by REST'
+    // })
+    // .withAuthClient(jwt)
+    // .execute(function(err, result) {
+    //   if (err) {
+    //     console.log('Error:', err);
+    //     return;
+    //   }
+    //   justAdded = result.data.id;
+    //   console.log('Inserted:', result.data.id);
+    // });
 
   });
 });
