@@ -1,7 +1,11 @@
 xTuple OAuth2 Client for Node
 ====
 
-Node client to work with [xTuple REST services.](http://github.com/xtuple/xtuple)
+Node.js client to work with [xTuple REST services.](http://github.com/xtuple/xtuple)
+
+**Note: This client is a sample application to demonstrate a use-case for using the xTuple REST Api with Node.js. If you are looking for a client for use with your REST application, then you should use the [xtuple-rest-client](https://github.com/lynnaloo/xtuple-rest-client).
+
+## How to Use:
 
 ### Create new OAuth2 Client
 
